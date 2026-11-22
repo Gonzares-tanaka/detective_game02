@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#101822">
+  <title>__GAME_TITLE__</title>
+  <style>
+    :root { color-scheme: dark; background: #101822; }
+    * { box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; overscroll-behavior: none; }
+    body { display: grid; place-items: center; touch-action: none; user-select: none;
+      -webkit-user-select: none; -webkit-tap-highlight-color: transparent;
+      padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left); }
+    #start-gate { position: fixed; inset: 0; z-index: 9999; display: grid; place-items: center;
+      padding: 24px; background: radial-gradient(ellipse at 50% 35%, #344b59, #101822 65%); }
+    .intro { width: min(100%, 420px); text-align: center; }
+    .eyebrow { color: #d4ae68; font-size: 12px; letter-spacing: .2em; }
+    h1 { font: 700 26px/1.7 system-ui, sans-serif; color: #f3e7cc; }
+    h1 span { display: block; font-size: 18px; font-weight: 400; }
+    #start-button { padding: 18px 28px; width: 100%; border: 1px solid #d4ae68; border-radius: 3px;
+      background: #1b2836; color: #f3e7cc; font: 700 17px/1.5 system-ui, sans-serif; touch-action: manipulation; }
+    #start-button:active { background: #344b59; }
+    .hint { font: 13px/1.8 system-ui, sans-serif; color: #a6b7bc; }
+    canvas, canvas#pyxel-screen { display: block !important; width: min(100vw, 133.333vh) !important;
+      height: min(75vw, 100vh) !important; width: min(100vw, 133.333dvh) !important;
+      height: min(75vw, 100dvh) !important; max-width: 100% !important; max-height: 100% !important;
+      margin: auto !important; object-fit: contain; image-rendering: pixelated; touch-action: none; }
+  </style>
+</head>
+<body>
+<div id="start-gate"><div class="intro">
+  <p class="eyebrow">KENT CASE FILES / 02</p>
+  <h1>__GAME_MAIN_TITLE__<span>__GAME_SUBTITLE__</span></h1>
+  <button id="start-button" type="button">タッチしてゲームを読み込む</button>
+  <p class="hint" id="load-note">読み込み後、画面をタッチして開始。<br>音声あり／音量は端末側で調整できます</p>
+</div></div>
+<script src="https://cdn.jsdelivr.net/gh/kitao/pyxel@2.9.9/wasm/pyxel.js"></script>
+<script>
+  // Like the first game, unlock and resume audio only through real gestures.
+  (() => {
+    const Native = window.AudioContext || window.webkitAudioContext;
+    const contexts = [];
+    let resumeOnReturn = false;
+    if (Native) {
+      class Tracked extends Native {
+        constructor(...args) { super(...args); contexts.push(this); }
+      }
+      window.AudioContext = Tracked;
+      window.webkitAudioContext = Tracked;
+    }
+    const allContexts = () => {
+      const sdl = window.pyxelContext?.pyodide?._module?.SDL2?.audioContext;
+      return sdl && !contexts.includes(sdl) ? [...contexts, sdl] : contexts;
+    };
+    const resume = () => allContexts().forEach(c => {
+      if (c.state === "suspended") c.resume().catch(() => {});
+    });
+    document.addEventListener("pointerdown", resume, true);
+    document.addEventListener("touchend", resume, {capture: true, passive: true});
+    document.addEventListener("keydown", resume, true);
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) {
+        resumeOnReturn = allContexts().some(c => c.state === "running");
+        allContexts().forEach(c => { if (c.state === "running") c.suspend().catch(() => {}); });
+      } else if (resumeOnReturn) { resume(); }
+    });
+    let started = false;
+    document.getElementById("start-button").addEventListener("click", () => {
+      if (started) return;
+      if (typeof launchPyxel !== "function") {
+        document.getElementById("load-note").textContent = "配信元に接続できません。ネット接続を確認して再試行してください。";
+        return;
+      }
+      started = true;
+      if (Native) {
+        const context = new window.AudioContext();
+        context.resume().catch(() => {});
+      }
+      document.getElementById("start-gate").remove();
+      launchPyxel({ command: "play", name: "kent_case2.pyxapp", gamepad: "disabled", base64: "__PYXAPP_BASE64__" });
+      resume();
+    });
+  })();
+</script>
+</body>
+</html>

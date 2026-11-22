@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101822">
+  <meta name="description" content="ケントのもとに二人の訪問者。怪盗事件か、恋の予感か？ 名探偵と家族の新たな一日を描く、Pyxel製の分岐型コメディサウンドノベル。ブラウザーで無料で遊べます。">
+  <title>名探偵ケントの事件簿2 ～名探偵の家族～</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='8' fill='%23101822'/%3E%3Ctext x='17' y='46' font-size='43' font-family='serif' fill='%23d4ae68'%3EK%3C/text%3E%3C/svg%3E">
+  <style>
+    :root { color-scheme: dark; --bg:#101822; --panel:#1b2836; --ink:#f3e7cc; --quiet:#b1bdc8; --gold:#d4ae68; --line:#344653; --teal:#80b0b3; }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; scroll-padding-top:6rem; }
+    body { margin:0; background:var(--bg); color:var(--ink); font:1rem/1.9 "Yu Gothic", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif; }
+    a { color:inherit; text-underline-offset:.25em; }
+    a:hover { color:var(--gold); }
+    button, a { -webkit-tap-highlight-color:transparent; }
+    button { font:inherit; cursor:pointer; }
+    :focus-visible { outline:3px solid var(--gold); outline-offset:5px; }
+    .skip-link { position:fixed; z-index:20; top:-5rem; left:1rem; padding:.5rem 1rem; background:var(--panel); }
+    .skip-link:focus { top:1rem; }
+    .wrap { width:min(1200px, calc(100% - 4rem)); margin-inline:auto; }
+    .site-header { border-bottom:1px solid var(--line); background:#101822f5; }
+    .header-inner { min-height:80px; display:flex; align-items:center; justify-content:space-between; gap:1.5rem; }
+    .brand { color:var(--gold); text-decoration:none; font:700 1.15rem/1.2 Georgia, serif; letter-spacing:.12em; }
+    .brand small { display:block; margin-top:.4rem; color:var(--quiet); font:400 .75rem/1.2 sans-serif; letter-spacing:.16em; }
+    nav { display:flex; flex-wrap:wrap; align-items:center; gap:1.6rem; }
+    nav a { text-decoration:none; font-size:.9rem; }
+    .hero { display:grid; grid-template-columns:.85fr 1.15fr; align-items:center; gap:3.5rem; padding-block:4.5rem 4rem; }
+    .eyebrow { color:var(--gold); font-size:.8rem; font-weight:700; letter-spacing:.16em; margin:0 0 1.25rem; }
+    h1, h2, h3, p { margin-top:0; }
+    h1, h2 { font-family:"Yu Mincho", "Hiragino Mincho ProN", "Noto Serif JP", serif; }
+    h1 { font-size:clamp(2.1rem, 3.5vw, 3.1rem); line-height:1.6; letter-spacing:.05em; margin-bottom:.8rem; }
+    h1 span { display:block; }
+    .subtitle { font-family:"Yu Mincho", serif; color:var(--gold); font-size:1.2rem; letter-spacing:.08em; margin-bottom:1.8rem; }
+    .lead { color:var(--quiet); margin-bottom:1.5rem; }
+    .genre { display:flex; flex-wrap:wrap; gap:.6rem 1.3rem; font-size:.875rem; color:var(--teal); margin-top:1.6rem; }
+    .button { display:inline-flex; justify-content:center; align-items:center; min-height:48px; padding:.65rem 1.4rem; border:1px solid var(--gold); background:var(--gold); color:var(--bg); text-decoration:none; font-weight:700; border-radius:2px; }
+    .button:hover { background:#e6c58a; color:var(--bg); }
+    .button.secondary { background:transparent; color:var(--gold); }
+    .button.secondary:hover { background:var(--panel); }
+    .player-column { min-width:0; scroll-margin-top:1.5rem; }
+    .player-top { display:flex; justify-content:space-between; align-items:center; gap:1rem; margin-bottom:.6rem; }
+    .player-top h2 { margin:0; color:var(--gold); font:700 .85rem/1.5 sans-serif; letter-spacing:.1em; }
+    .player-top a { font-size:.875rem; color:var(--quiet); white-space:nowrap; }
+    .player-frame { aspect-ratio:4/3; background:var(--bg); border:1px solid var(--gold); box-shadow:0 16px 48px #0004; }
+    iframe { display:block; width:100%; height:100%; border:0; }
+    .player-frame:fullscreen { width:100vw; height:100dvh; border:0; display:flex; align-items:center; justify-content:center; }
+    .player-frame:fullscreen iframe { width:min(100vw, 133.333dvh); height:min(75vw, 100dvh); }
+    .player-bottom { display:flex; align-items:center; justify-content:space-between; gap:1rem; margin-top:.8rem; }
+    .player-bottom p { margin:0; color:var(--quiet); font-size:.875rem; }
+    .text-button { border:1px solid var(--line); color:var(--ink); padding:.4rem .8rem; min-height:40px; background:transparent; white-space:nowrap; font-size:.875rem; }
+    .text-button:hover { border-color:var(--gold); color:var(--gold); }
+    .section { padding-block:4.5rem; border-top:1px solid var(--line); }
+    .section-title { font-size:clamp(1.6rem, 3vw, 2.2rem); line-height:1.65; letter-spacing:.04em; margin-bottom:1.8rem; }
+    .story-intro { display:grid; grid-template-columns:.9fr 1.1fr; gap:4rem; }
+    .story-intro .eyebrow { margin-bottom:.7rem; }
+    .story-copy { color:var(--quiet); }
+    .story-copy p:last-child { color:var(--ink); }
+    .routes { display:grid; grid-template-columns:1fr 1fr; gap:2rem; margin-top:2rem; }
+    .route { border-top:2px solid var(--gold); background:var(--panel); }
+    .route.love { border-color:var(--teal); }
+    .route img { display:block; width:100%; aspect-ratio:256/100; object-fit:cover; image-rendering:pixelated; }
+    .route-content { padding:1.5rem 1.7rem; }
+    .route h3 { font-size:1.25rem; margin-bottom:.6rem; }
+    .route p { color:var(--quiet); margin-bottom:0; }
+    .route .role { margin-bottom:.5rem; color:var(--gold); }
+    .route.love .role { color:var(--teal); }
+    .section-heading { display:flex; align-items:baseline; justify-content:space-between; gap:2rem; }
+    .section-heading p { color:var(--quiet); }
+    .controls-note { max-width:58rem; color:var(--quiet); }
+    .controls-table { width:100%; border-collapse:collapse; margin-top:1.8rem; }
+    .controls-table th, .controls-table td { padding:1.1rem 1rem; text-align:left; border-bottom:1px solid var(--line); vertical-align:top; }
+    .controls-table thead { color:var(--gold); background:var(--panel); }
+    .controls-table tbody th { font-weight:500; width:28%; }
+    .controls-table td { color:var(--quiet); }
+    kbd { font:inherit; font-size:.9em; color:var(--ink); white-space:nowrap; }
+    .notes { margin:1.2rem 0 0; padding-left:1.2rem; color:var(--quiet); font-size:.9rem; }
+    .notes li { margin:.4rem 0; }
+    .cast { display:grid; grid-template-columns:1fr 1fr; column-gap:3rem; }
+    .character { padding:1.5rem 0; border-bottom:1px solid var(--line); }
+    .character h3 { margin:0 0 .65rem; font-size:1.35rem; }
+    .role { color:var(--gold); font-size:.875rem; margin:0 0 .5rem; }
+    .character p:last-child { margin-bottom:0; color:var(--quiet); }
+    .character.featured { grid-column:1/-1; padding:2rem 2.3rem; margin-bottom:.5rem; background:var(--panel); border-left:3px solid var(--gold); }
+    .character.featured h3 { font-size:1.7rem; }
+    .download { display:flex; align-items:center; justify-content:space-between; gap:2rem; padding:2rem; background:var(--panel); }
+    .download h3 { font-size:1.15rem; margin-bottom:.5rem; }
+    .download p { margin:0; color:var(--quiet); font-size:.9rem; }
+    .download .button { flex-shrink:0; }
+    footer { padding:2rem 0; border-top:1px solid var(--line); color:var(--quiet); font-size:.85rem; }
+    .footer-inner { display:flex; flex-wrap:wrap; justify-content:space-between; gap:1rem; }
+    .footer-inner p { margin:0; }
+    @media (max-width:1000px) {
+      .hero { gap:2rem; grid-template-columns:.8fr 1.2fr; }
+      h1 { font-size:2rem; }
+      .story-intro { gap:2rem; }
+    }
+    @media (max-width:760px) {
+      .wrap { width:calc(100% - 2rem); }
+      .header-inner { padding-block:1rem; align-items:flex-start; }
+      .brand { font-size:1rem; }
+      nav { gap:.5rem 1rem; justify-content:flex-end; }
+      nav a { font-size:.875rem; }
+      nav .repo-link { display:none; }
+      .hero { grid-template-columns:1fr; padding-block:2.5rem 3rem; gap:2rem; }
+      h1 { font-size:2.3rem; }
+      .lead { max-width:34rem; }
+      .section { padding-block:3rem; }
+      .story-intro, .routes, .cast { grid-template-columns:1fr; gap:1rem; }
+      .story-intro { gap:0; }
+      .routes { margin-top:1.25rem; gap:1.5rem; }
+      .section-heading { display:block; }
+      .section-heading p { margin-bottom:1.5rem; }
+      .character.featured { padding:1.5rem; }
+      .character { padding-block:1rem; }
+      .controls-table th, .controls-table td { padding:.8rem .45rem; }
+      .controls-table tbody th { width:27%; }
+      .download { display:block; padding:1.5rem; }
+      .download .button { margin-top:1.2rem; }
+    }
+    @media (prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#play">ゲーム画面へ移動</a>
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="brand" href="#top">KENT CASE FILES<small>名探偵ケントの事件簿2</small></a>
+      <nav aria-label="ページ内ナビゲーション">
+        <a href="#story">ストーリー</a><a href="#controls">操作方法</a><a href="#characters">登場人物</a>
+        <a class="repo-link" href="https://github.com/Gonzares-tanaka/detective_game02">GitHub</a>
+      </nav>
+    </div>
+  </header>
+  <main id="top">
+    <div class="wrap hero">
+      <div>
+        <p class="eyebrow">分岐型コメディサウンドノベル</p>
+        <h1><span>名探偵ケントの</span>事件簿2</h1>
+        <p class="subtitle">～名探偵の家族～</p>
+        <p class="lead">事件も、恋も、名探偵の思いどおり？<br>二人の訪問者から始まる、<br>だいたい残念で、ときどき鮮やかな一日。</p>
+        <a class="button" href="#play">ゲームを遊ぶ</a>
+        <div class="genre"><span>ブラウザーで無料プレイ</span><span>2つの物語</span><span>タッチ対応</span></div>
+      </div>
+      <section class="player-column" id="play" aria-labelledby="player-heading">
+        <div class="player-top"><h2 id="player-heading">PLAY IN YOUR BROWSER</h2><a href="web/game.html" target="_blank" rel="noopener">ゲーム画面だけで開く</a></div>
+        <div class="player-frame" id="player-frame">
+          <iframe id="game-frame" src="web/game.html" title="名探偵ケントの事件簿2 ～名探偵の家族～ ゲーム画面" allow="autoplay; fullscreen" allowfullscreen></iframe>
+        </div>
+        <div class="player-bottom"><p>音声あり。音量は端末側で調整できます。</p><button class="text-button" id="fullscreen-button" type="button">全画面で遊ぶ</button></div>
+      </section>
+    </div>
+
+    <section class="section" id="story">
+      <div class="wrap">
+        <div class="story-intro">
+          <div><p class="eyebrow">STORY</p><h2 class="section-title">ケントのもとに、<br>二人の訪問者。</h2></div>
+          <div class="story-copy">
+            <p>大きなスクリーンはある。でも、プロジェクターはない。<br>そんな探偵事務所にやってきたのは、ニヤ警部と妹のウテナ。</p>
+            <p>一流ホテルに届いた怪盗の予告状。<br>そして、名探偵に会ってみたいという女性の紹介。<br>まずは、どちらの話を聞こうか。</p>
+            <p>名探偵と家族の、新たな事件が始まる！</p>
+          </div>
+        </div>
+        <div class="routes">
+          <article class="route">
+            <img src="web/site-assets/hotel.png" width="256" height="100" alt="シャンデリアと大階段が輝くシガ帝国ホテルのロビー" loading="lazy">
+            <div class="route-content"><p class="role">ニヤ警部の話を聞くと……</p><h3>怪盗ルート</h3><p>父・達夫の作品を狙う怪盗マーズ。次の標的は、金色の彫像「ロゴスフィア・光」。ケントとニヤ警部は、予告時刻の展示室で怪盗を迎え撃つ。</p></div>
+          </article>
+          <article class="route love">
+            <img src="web/site-assets/park.png" width="256" height="100" alt="夕暮れの木々と花に囲まれた公園のベンチ" loading="lazy">
+            <div class="route-content"><p class="role">ウテナの話を聞くと……</p><h3>恋物語ルート</h3><p>妹が紹介してくれたのは、名探偵の名声に興味を持つサーヤ。買い物に食事、そして恋の予感。事件より難しい一日に、ケントの自信は揺るがない。</p></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="controls">
+      <div class="wrap">
+        <p class="eyebrow">HOW TO PLAY</p>
+        <h2 class="section-title">読む。選ぶ。たまに、やり直す。</h2>
+        <p class="controls-note">文章を読み進め、2つの選択肢から行動を選びます。間違えると即ゲームオーバー。常識が正解とは限らないのが、ケントの事件簿です。タイトルに戻って、何度でも挑戦してください。</p>
+        <table class="controls-table">
+          <thead><tr><th scope="col">操作</th><th scope="col">PC</th><th scope="col">スマートフォン</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">開始・文章送り</th><td><kbd>Space</kbd> / <kbd>Enter</kbd>、クリック</td><td>ゲーム画面をタッチ</td></tr>
+            <tr><th scope="row">選択肢を選ぶ</th><td>矢印キーで選択、<kbd>Space</kbd> / <kbd>Enter</kbd>で決定。クリックや<kbd>1</kbd> / <kbd>2</kbd>も使用可</td><td>選択肢のボタンを直接タッチ</td></tr>
+            <tr><th scope="row">タイトルに戻る</th><td>終了画面で決定・クリック・<kbd>R</kbd></td><td>終了画面をタッチ</td></tr>
+          </tbody>
+        </table>
+        <ul class="notes">
+          <li>文字の表示中に決定すると全文表示、もう一度決定すると次へ進みます。</li>
+          <li>選択肢の上下はプレイごとにランダムです。表示されている文章を読んで選んでください。</li>
+          <li>PCではゲーム画面を一度クリックしてからキー操作してください。<kbd>Esc</kbd>でゲームを終了できます。</li>
+          <li>初回は読み込みに時間がかかることがあります。インターネット接続が必要です。</li>
+          <li>BGMとタイプ音が流れます。音量は端末やブラウザー側で調整してください。進行のセーブ機能はありません。</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="section" id="characters">
+      <div class="wrap">
+        <div class="section-heading"><div><p class="eyebrow">CHARACTERS</p><h2 class="section-title">名探偵と、にぎやかな面々。</h2></div><p>頼れる相棒も、心配する家族も。</p></div>
+        <div class="cast">
+          <article class="character featured"><p class="role">自信たっぷりの名探偵</p><h3>ケント</h3><p>T大卒。ただし四浪。学歴を誇る、関西弁の脱力した変人。本人いわく「男気がある」。ものづくりにも意外な一面があるが、その才能には気づいていない。</p></article>
+          <article class="character"><p class="role">頼れる相棒</p><h3>ニヤ警部</h3><p>ケントを信頼する県警の警部。現場では実務をこなし、会話ではツッコミをこなす。今回も名探偵の力を借りに、事務所を訪れる。</p></article>
+          <article class="character"><p class="role">兄を心配する妹</p><h3>ウテナ</h3><p>O女大出身のしっかり者。兄の将来を心配し、サーヤを紹介する。ケントの自慢にも言い訳にも、容赦のない一言が飛ぶ。</p></article>
+          <article class="character"><p class="role">予告状の差出人</p><h3>マーズ</h3><p>達夫の作品を中心に盗む怪盗。次の狙いは、シガ帝国ホテルの「ロゴスフィア・光」。名探偵ケントへの対抗心を燃やしている。</p></article>
+          <article class="character"><p class="role">名探偵に会いたい女性</p><h3>サーヤ</h3><p>ケントの名声に興味を持ち、一度会ってみたいと思っていた。ウテナの紹介で、名探偵と一緒に街へ出かけることになる。</p></article>
+          <article class="character"><p class="role">シガ帝国ホテルの使用人</p><h3>ウッディー</h3><p>怪盗の予告状を受け取ったホテルの使用人。片言の日本語で丁寧に対応するが、やってきた名探偵はなぜか上から目線。</p></article>
+          <article class="character"><p class="role">ケントが語る恋人</p><h3>サヨリ</h3><p>ケントを一途に想い、実家に帰るといつも会いに来てくれるらしい。ただし、その話を聞いたウテナには、まるで心当たりがない。</p></article>
+          <article class="character"><p class="role">名高い芸術家であり、父</p><h3>達夫</h3><p>今は亡き、ケントの父。高く評価される作品の数々が、今回の事件を動かしていく。家族の思い出にも欠かせない存在。</p></article>
+          <article class="character"><p class="role">名前だけでも存在感のある母</p><h3>ゆうこ</h3><p>ケントの母。姿は登場しないが、名探偵の日々の暮らしと切っても切れない関係。詳しくは、ケント本人の口から。</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap download"><div><h3>GKD Pixel 2でも、事件簿を。</h3><p>十字キーで選択、Aで決定。配置方法は同梱のREADMEをご覧ください。<br>実機での動作は未確認です。</p></div><a class="button secondary" href="dist/detective_kent2_gkd.zip" download>GKD版をダウンロード</a></div>
+    </section>
+  </main>
+  <footer><div class="wrap footer-inner"><p>名探偵ケントの事件簿2 ～名探偵の家族～</p><p>Made with Pyxel · <a href="https://github.com/Gonzares-tanaka/detective_game02">ソースコード / GitHub</a></p></div></footer>
+  <script>
+    document.getElementById('fullscreen-button').addEventListener('click', async () => {
+      const player = document.getElementById('player-frame');
+      if (player.requestFullscreen) {
+        try { await player.requestFullscreen(); document.getElementById('game-frame').focus(); }
+        catch (_) { window.open('web/game.html', '_blank', 'noopener'); }
+      } else { window.open('web/game.html', '_blank', 'noopener'); }
+    });
+  </script>
+</body>
+</html>
