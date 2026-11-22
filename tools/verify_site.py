@@ -49,7 +49,7 @@ def tap(page, frame, x, y):
 
 
 def check_page(page):
-    assert page.title() == "名探偵ケントの事件簿2 ～名探偵の家族～"
+    assert page.title() == json.loads((ROOT / "story.json").read_text(encoding="utf-8"))["title"]
     assert page.locator(".character").count() == 9
     for section in ("#story", "#controls", "#characters", "#play"):
         assert page.locator(section).count() == 1
